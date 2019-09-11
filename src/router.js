@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import Main from '@/components/main.vue'
+// import Main from '@/components/main.vue'
 import Workbench from '@/components/workbench.vue'
 Vue.use(Router)
 
@@ -15,7 +15,7 @@ export default new Router({
       path: '/home',
       name: 'home',
       component: Home,
-      redirect:{path:'/home/workbench'},
+      // redirect:{path:'/home'},
       children:[
         {
           path:'workbench',

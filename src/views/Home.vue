@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <router-link to="/" class="logo">
-          <img src="../assets/logo.png" alt="">
+          <img src="../assets/logo.png" alt />
         </router-link>
       </el-header>
       <el-container>
@@ -12,8 +12,10 @@
           <el-row class="tac">
             <el-col :span="24">
               <div class="title">
-                <i class="el-icon-location"></i>
-                <h2>工作台</h2>
+                <router-link to="/home/workbench">
+                  <i class="el-icon-location"></i>
+                  <h2>工作台</h2>
+                </router-link>
               </div>
               <el-menu
                 default-active="2"
@@ -153,6 +155,7 @@ export default {
     height: 100%;
   }
   .el-header {
+    height: 10%;
     padding-left: 0;
     border-bottom: 2px solid #dddddd;
     .logo {
@@ -165,29 +168,34 @@ export default {
     }
   }
   .el-aside {
+    height: 100%;
     box-shadow: 4px 4px 9px #ddd;
     z-index: 10;
     .tac {
       .title {
         height: 54px;
-        display: flex;
-        font-size: 18px;
-        font-weight: 600;
-        align-items: center;
         padding-left: 22px;
         cursor: pointer;
+        a {
+          height:100%;
+          display: flex;
+          font-size: 18px;
+          font-weight: 600;
+          align-items: center;
+        }
       }
     }
   }
   .el-main {
-    margin: 0;
-    padding: 0;
     background-color: #eff4f8;
     .el-breadcrumb {
       height: 50px;
       font-size: 18px;
       background-color: #fff;
     }
+  }
+  .el-footer{
+    height:10%;
   }
 }
 </style>
