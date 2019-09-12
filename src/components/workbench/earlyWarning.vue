@@ -7,7 +7,7 @@
           <span>课时预警</span>
           <span>请假预警</span>
           <i>
-            <img src="../../assets/images/shuaxin.png" alt />
+            <img src="@/assets/images/shuaxin.png" alt />
           </i>
         </div>
         <div class="dataWarning-titleRecord">
@@ -23,7 +23,7 @@
         <div class="dataWarning-titleLeft">
           <span>排课预警</span>
           <i>
-            <img src="../../assets/images/shuaxin.png" alt />
+            <img src="@/assets/images/shuaxin.png" alt />
           </i>
         </div>
         <div class="dataWarning-titleRecord">
@@ -39,7 +39,7 @@
         <div class="dataWarning-titleLeft">
           <span>流失预警</span>
           <i>
-            <img src="../../assets/images/shuaxin.png" alt />
+            <img src="@/assets/images/shuaxin.png" alt />
           </i>
         </div>
         <div class="dataWarning-titleRecord">

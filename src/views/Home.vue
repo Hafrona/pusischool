@@ -2,16 +2,14 @@
   <div class="home">
     <el-container>
       <el-header>
-        <router-link to="/" class="logo">
-          <img src="../assets/logo.png" alt />
-        </router-link>
+        <headeruser />
       </el-header>
       <el-container>
         <!-- 首页左侧导航栏 -->
         <el-aside width="300px">
           <el-row class="tac">
             <el-col :span="24">
-              <div class="title">
+              <div class="title active">
                 <router-link to="/home/workbench">
                   <i class="el-icon-location"></i>
                   <h2>工作台</h2>
@@ -22,10 +20,16 @@
                 class="el-menu-vertical-demo"
                 @open="handleOpen"
                 @close="handleClose"
+                @select="slct"
+                active-text-color="#fff"
+                :unique-opened="true"
+                :router="true"
               >
-                <el-submenu index="1">
+                <el-submenu index="1" class="">
                   <template slot="title">
-                    <i class="el-icon-location"></i>
+                    <i>
+                      <img src="@/assets/images/zhaosheng.png" alt />
+                    </i>
                     <span>招生</span>
                   </template>
                   <el-menu-item-group>
@@ -38,7 +42,9 @@
                 </el-submenu>
                 <el-submenu index="2">
                   <template slot="title">
-                    <i class="el-icon-location"></i>
+                    <i>
+                      <img src="@/assets/images/jiaoxue.png" alt />
+                    </i>
                     <span>教学</span>
                   </template>
                   <el-menu-item-group>
@@ -51,7 +57,9 @@
                 </el-submenu>
                 <el-submenu index="3">
                   <template slot="title">
-                    <i class="el-icon-location"></i>
+                    <i>
+                      <img src="@/assets/images/yunying.png" alt />
+                    </i>
                     <span>运营</span>
                   </template>
                   <el-menu-item-group>
@@ -64,7 +72,9 @@
                 </el-submenu>
                 <el-submenu index="4">
                   <template slot="title">
-                    <i class="el-icon-location"></i>
+                    <i>
+                      <img src="@/assets/images/fuwu.png" alt />
+                    </i>
                     <span>服务</span>
                   </template>
                   <el-menu-item-group>
@@ -77,7 +87,9 @@
                 </el-submenu>
                 <el-submenu index="5">
                   <template slot="title">
-                    <i class="el-icon-location"></i>
+                    <i>
+                      <img src="@/assets/images/baobiao.png" alt />
+                    </i>
                     <span>报表</span>
                   </template>
                   <el-menu-item-group>
@@ -90,7 +102,9 @@
                 </el-submenu>
                 <el-submenu index="6">
                   <template slot="title">
-                    <i class="el-icon-location"></i>
+                    <i>
+                      <img src="@/assets/images/yingyong.png" alt />
+                    </i>
                     <span>应用</span>
                   </template>
                   <el-menu-item-group>
@@ -103,7 +117,9 @@
                 </el-submenu>
                 <el-submenu index="7">
                   <template slot="title">
-                    <i class="el-icon-location"></i>
+                    <i>
+                      <img src="@/assets/images/xitong.png" alt />
+                    </i>
                     <span>系统</span>
                   </template>
                   <el-menu-item-group>
@@ -129,20 +145,31 @@
           <router-view></router-view>
         </el-main>
       </el-container>
-
       <el-footer>Footer</el-footer>
     </el-container>
   </div>
 </template>
 
 <script>
+import headeruser from "@/views/header";
 export default {
+  data(){
+    return{
+      
+    }
+  },
+  components: {
+    headeruser
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+    },
+    slct(key, keyPath){
+      console.log(key, keyPath)
     }
   }
 };
@@ -155,17 +182,9 @@ export default {
     height: 100%;
   }
   .el-header {
-    height: 10%;
+    // height: 10%;
     padding-left: 0;
     border-bottom: 2px solid #dddddd;
-    .logo {
-      display: inline-block;
-      width: 300px;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
   }
   .el-aside {
     height: 100%;
@@ -174,28 +193,48 @@ export default {
     .tac {
       .title {
         height: 54px;
-        padding-left: 22px;
+        padding-left: 35px;
         cursor: pointer;
         a {
-          height:100%;
+          height: 100%;
           display: flex;
           font-size: 18px;
           font-weight: 600;
           align-items: center;
         }
+        h2 {
+          padding-left: 27px;
+          color: inherit;
+        }
+      }
+      .el-submenu {
+        i {
+          margin-right: 25px;
+          padding-left: 15px;
+          color: inherit;
+        }
       }
     }
   }
   .el-main {
+    margin: 0;
+    padding: 0;
     background-color: #eff4f8;
     .el-breadcrumb {
       height: 50px;
       font-size: 18px;
+      margin-bottom: 0;
       background-color: #fff;
+      padding-left: 30px;
     }
   }
-  .el-footer{
-    height:10%;
+  .el-footer {
+    // height:10%;
   }
+  .active {
+    background-color: #7aa9ff;
+    color: #fff !important;
+  }
+  
 }
 </style>

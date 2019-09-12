@@ -3,7 +3,9 @@
     <!-- 常用导航栏 -->
     <div class="frequently">
       <div class="frequentlyNav" v-for="(item,index) in nav" :key="index">
-        <img :src="item.img" alt />
+        <i>
+          <img :src="item.img" alt />
+        </i>
         <div class="frequentlyNav-text">{{item.navtext}}</div>
       </div>
     </div>
@@ -16,18 +18,22 @@
       <span>+</span>
     </div>
     <!-- 预警 -->
-    <earlywarning/>
+    <earlywarning />
     <!-- 提醒部分 -->
-    <remind/>
+    <remind />
+    <!-- 学员统计 -->
+    <visual />
   </div>
 </template>
 <script>
-import remind from './workbench/remind.vue'
-import earlywarning from './workbench/earlyWarning.vue'
+import remind from "./workbench/remind.vue";
+import earlywarning from "./workbench/earlyWarning.vue";
+import visual from "./workbench/visual.vue";
 export default {
-  components:{
+  components: {
     remind,
-    earlywarning
+    earlywarning,
+    visual
   },
   data() {
     return {
@@ -99,7 +105,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .main {
-  height:100%;
+  height: 100%;
   padding: 20px 20px 0;
   .frequently {
     width: 100%;
@@ -112,8 +118,14 @@ export default {
     .frequentlyNav {
       flex: 1;
       text-align: center;
-      img {
+      i {
+        width: 50px;
+        height: 50px;
+        display: inline-block;
         margin-bottom: 10px;
+        img {
+          width: 100%;
+        }
       }
     }
   }
