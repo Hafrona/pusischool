@@ -1,31 +1,35 @@
 <template>
   <div class="home">
-    <el-container :class="{active:pack}">
+    <el-container :class="{leftNavPutAway:pack}">
       <!-- 头部 -->
       <el-header>
         <div class="header">
           <router-link to="/" class="logo">
-            <img src="@/public/images/logo.png" alt />
+            <img src="../../public/images/logo.png" alt />
           </router-link>
+          <!-- header左边区域 -->
           <div class="header-left-search">
             <i @click="packUp"></i>
             <div class="search-input">
               <input type="text" placeholder="搜索功能/学员" v-model="searchValue" />
               <i></i>
             </div>
-            <span></span>
+            <span @click="dialogTableVisible = true"></span>
           </div>
+          <!-- header右边区域 -->
           <div class="header-right-user">
-            <div class="user-btn">
-              <div class="user-btn-sita" @click="isShow = 'true'">
+            <!-- 选择校区 -->
+            <div class="user-select">
+              <div class="user-select-btn" @click="selectSchool = true">
                 <i></i>
                 <span>莆田市城厢区校区</span>
                 <div class="user-trilateral"></div>
               </div>
             </div>
+            <!-- 用户名 -->
             <div class="user-name">
               <i>
-                <img src="@/public/images/touxiang.png" alt />
+                <img src="../../public/images/touxiang.png" alt />
               </i>
               <el-dropdown trigger="click">
                 <span class="el-dropdown-link">
@@ -33,28 +37,81 @@
                   <i class="user-trilateral"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-plus">狮子头</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-plus-outline">螺蛳粉</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-check">双皮奶</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">蚵仔煎</el-dropdown-item>
+                  <el-dropdown-item icon="">我的个人资料</el-dropdown-item>
+                  <el-dropdown-item icon="">我的文件</el-dropdown-item>
+                  <el-dropdown-item icon="">我的角色权限</el-dropdown-item>
+                  <el-dropdown-item icon="">交班交款</el-dropdown-item>
+                  <el-dropdown-item icon="">业绩排行</el-dropdown-item>
+                  <el-dropdown-item icon="">我的业绩</el-dropdown-item>
+                  <el-dropdown-item icon="">新手引导</el-dropdown-item>
+                  <el-dropdown-item icon="">设置导航</el-dropdown-item>
+                  <el-dropdown-item icon="">关于</el-dropdown-item>
+                  <el-dropdown-item icon="">锁定屏幕</el-dropdown-item>
+                  <el-dropdown-item icon="">退出</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
+            <!-- 用户状态 -->
             <div class="user-status">
-              <i @click='rightAside = !rightAside'></i>
+              <i @click="rightAside = !rightAside"></i>
             </div>
           </div>
-          <!-- 遮罩层 -->
-          <div :class="isShow?'mask':''" @click="mask"></div>
+          <!-- 点击选择校区打开弹框 -->
+          <el-dialog title="选择校区" :visible.sync="selectSchool" class="select-school">
+            <el-input></el-input>
+            <div class="select-school-content">众来达教育</div>
+            <div slot="footer" class="dialog-footer">
+              <el-button type="primary" @click="selectSchool = false">确 定</el-button>
+              <el-button @click="selectSchool = false">取 消</el-button>
+            </div>
+          </el-dialog>
+          <!-- 点击铃铛打开我的任务 -->
+          <el-dialog title="我的任务" :visible.sync="dialogTableVisible" class="assignment">
+            <el-radio-group v-model="radio">
+              <el-radio :label="3">今日待办</el-radio>
+              <el-radio :label="6">未来待办</el-radio>
+              <el-radio :label="9">过期待办</el-radio>
+              <el-radio :label="12">已办</el-radio>
+            </el-radio-group>
+            <div class="assignment-from">
+              <table class="assignment-table">
+                <thead class="assignment-table-thead">
+                  <tr>
+                    <th>服务对象</th>
+                    <th>服务类型</th>
+                    <th>截止时间</th>
+                    <th>回访来源</th>
+                    <th>备注</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody class="assignment-table-tbody">
+                  <tr v-for="(item,index) in assignmentData" :key="index">
+                    <td>{{item.text}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- 分页 -->
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPage2"
+              :page-sizes="[5, 10, 15, 20]"
+              :page-size="10"
+              layout="total,sizes, prev, pager, next"
+              :total="20"
+            ></el-pagination>
+          </el-dialog>
         </div>
       </el-header>
+      <!-- 内容 -->
       <el-container>
         <!-- 首页左侧导航栏 -->
         <el-aside :width="width">
           <el-row class="tac">
             <el-col :span="24">
-              <div class="title">
+              <div class="title" :class="{active:leftNav}" @click='leftNavWorkbench'>
                 <router-link to="/home/workbench">
                   <i class="el-icon-location"></i>
                   <h2>工作台</h2>
@@ -68,12 +125,12 @@
                 @select="slct"
                 active-text-color="#fff"
                 :unique-opened="true"
-                :router="true"
+                text-color='#909090'
               >
-                <el-submenu index="1" class>
+                <el-submenu index="1">
                   <template slot="title">
                     <i>
-                      <img src="@/public/images/zhaosheng.png" alt />
+                      <img src="../../public/images/zhaosheng.png" alt />
                     </i>
                     <span>招生</span>
                   </template>
@@ -88,7 +145,7 @@
                 <el-submenu index="2">
                   <template slot="title">
                     <i>
-                      <img src="@/public/images/jiaoxue.png" alt />
+                      <img src="../../public/images/jiaoxue.png" alt />
                     </i>
                     <span>教学</span>
                   </template>
@@ -103,7 +160,7 @@
                 <el-submenu index="3">
                   <template slot="title">
                     <i>
-                      <img src="@/public/images/yunying.png" alt />
+                      <img src="../../public/images/yunying.png" alt />
                     </i>
                     <span>运营</span>
                   </template>
@@ -118,7 +175,7 @@
                 <el-submenu index="4">
                   <template slot="title">
                     <i>
-                      <img src="@/public/images/fuwu.png" alt />
+                      <img src="../../public/images/fuwu.png" alt />
                     </i>
                     <span>服务</span>
                   </template>
@@ -133,7 +190,7 @@
                 <el-submenu index="5">
                   <template slot="title">
                     <i>
-                      <img src="@/public/images/baobiao.png" alt />
+                      <img src="../../public/images/baobiao.png" alt />
                     </i>
                     <span>报表</span>
                   </template>
@@ -148,7 +205,7 @@
                 <el-submenu index="6">
                   <template slot="title">
                     <i>
-                      <img src="@/public/images/yingyong.png" alt />
+                      <img src="../../public/images/yingyong.png" alt />
                     </i>
                     <span>应用</span>
                   </template>
@@ -163,7 +220,7 @@
                 <el-submenu index="7">
                   <template slot="title">
                     <i>
-                      <img src="@/public/images/xitong.png" alt />
+                      <img src="../../public/images/xitong.png" alt />
                     </i>
                     <span>系统</span>
                   </template>
@@ -189,9 +246,9 @@
           </el-breadcrumb>
           <router-view></router-view>
         </el-main>
-        <el-aside v-show='rightAside'>
-          右边
-        </el-aside>
+        <!-- <transition name="asideRight"> -->
+        <el-aside v-show="rightAside">右边</el-aside>
+        <!-- </transition> -->
       </el-container>
       <!-- 底部 -->
       <el-footer>Footer</el-footer>
@@ -200,15 +257,83 @@
 </template>
 
 <script>
+import { log } from 'util';
 export default {
   data() {
     return {
-      // pack: "",
+      // 用于判断左侧导航栏
+      leftNav:false,
+      // 我的任务
+      radio: 3,
+      // 总条数
+      pageNumber:10,
+      // 一页显示条数
+      pageSize:5,
+      assignmentData:[
+        {text:'没有数据',id:'1'},
+        {text:'没有数据',id:'2'},
+        {text:'没有数据',id:'3'},
+        {text:'没有数据',id:'4'},
+        {text:'没有数据',id:'5'},
+        {text:'没有数据',id:'6'},
+        {text:'没有数据',id:'7'},
+        {text:'没有数据',id:'8'},
+        {text:'没有数据',id:'9'},
+        {text:'没有数据',id:'10'},
+      ],
       searchValue: "",
       isShow: false,
       pack: false,
       width: "300px",
-      rightAside:false
+      rightAside: false,
+      // 我的任务
+      dialogTableVisible: false,
+      gridData: [
+        {
+          date: "2016-05-02",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        },
+        {
+          date: "2016-05-04",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        },
+        {
+          date: "2016-05-01",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        },
+        {
+          date: "2016-05-03",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        }
+      ],
+      selectSchool: false,
+      gridData: [
+        {
+          date: "2016-05-02",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        },
+        {
+          date: "2016-05-04",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        },
+        {
+          date: "2016-05-01",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        },
+        {
+          date: "2016-05-03",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        }
+      ],
+      currentPage2: 5
     };
   },
   methods: {
@@ -221,19 +346,24 @@ export default {
     slct(key, keyPath) {
       console.log(key, keyPath);
     },
-    packIndex(data) {
-      this.pack = data;
-    },
-    mask() {
-      this.isShow = !this.isShow;
-    },
+    // 点击收起左侧导航栏
     packUp() {
       this.pack = !this.pack;
       if (this.pack) {
-        this.width = "50px";
+        this.width = "65px";
       } else {
         this.width = "300px";
       }
+    },
+    // 分页
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+    leftNavWorkbench(){
+      this.leftNav = true;
     }
   }
 };
@@ -241,7 +371,7 @@ export default {
 <style lang="less" scoped>
 .home {
   height: 100%;
-  // overflow: hidden;
+  color: #909090;
   .el-container {
     height: 100%;
   }
@@ -280,7 +410,7 @@ export default {
           display: inline-block;
           width: 24px;
           height: 24px;
-          background-image: url("../public/images/daohanglan.png");
+          background-image: url("../../public/images/daohanglan.png");
         }
         .search-input {
           height: 26px;
@@ -298,7 +428,7 @@ export default {
           }
           i {
             cursor: pointer;
-            background-image: url("../public/images/sousuo.png");
+            background-image: url("../../public/images/sousuo.png");
             background-repeat: no-repeat;
             position: absolute;
             top: 3px;
@@ -310,7 +440,7 @@ export default {
           display: inline-block;
           width: 24px;
           height: 24px;
-          background-image: url("../public/images/tongzhi.png");
+          background-image: url("../../public/images/tongzhi.png");
         }
       }
       .header-right-user {
@@ -320,13 +450,13 @@ export default {
         justify-content: flex-end;
         align-items: center;
         padding-right: 20px;
-        .user-btn {
+        .user-select {
           margin-left: 35px;
           width: 178px;
           height: 26px;
           font-size: 12px;
           padding-right: 25px;
-          .user-btn-sita {
+          .user-select-btn {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -345,7 +475,7 @@ export default {
               display: block;
               width: 18px;
               height: 18px;
-              background-image: url("../public/images/dingwei.png");
+              background-image: url("../../public/images/dingwei.png");
               background-repeat: no-repeat;
               position: absolute;
               top: 5px;
@@ -382,7 +512,7 @@ export default {
             display: block;
             width: 24px;
             height: 24px;
-            background-image: url("../public/images/youce.png");
+            background-image: url("../../public/images/youce.png");
           }
         }
       }
@@ -405,6 +535,65 @@ export default {
         top: 0;
         left: 0;
       }
+      // 我的任务
+      .assignment {
+        /deep/.el-dialog__header {
+          border-bottom: 1px solid #e5e5e5;
+          span {
+            font-size: 16px;
+          }
+        }
+        /deep/.el-dialog {
+          width: 700px;
+          position: absolute;
+          top: 0px;
+          left: 30%;
+        }
+        .el-radio-group{
+          margin-bottom: 10px;
+        }
+        .assignment-from {
+          .assignment-table {
+            width: 100%;
+            .assignment-table-thead {
+              display: block;
+              height: 40px;
+              background-color: #eff4f8;
+              line-height: 40px;
+              border-radius: 4px;
+              font-size: 12px;
+              tr{
+                display: flex;
+
+                th{
+                  flex:2;
+                  &:nth-child(6){
+                    flex:4;
+                    text-align: right;
+                    padding-right: 30px;
+                  }
+                }
+              }
+            }
+            .assignment-table-tbody {
+              tr{
+                height: 40px;
+                border-bottom:1px solid #e5e5e5;
+                text-align: center;
+                line-height: 40px;
+                td{
+                }
+              }
+            }
+          }
+        }
+        // 分页
+        .el-pagination{
+          display: flex;
+          justify-content: flex-end;
+          padding:10px 0;
+        }
+      }
     }
   }
   // 左侧导航栏样式
@@ -412,6 +601,7 @@ export default {
     height: 100%;
     box-shadow: 4px 4px 9px #ddd;
     z-index: 10;
+    transition: all 0.3s;
     .tac {
       .title {
         height: 54px;
@@ -426,14 +616,16 @@ export default {
         }
         h2 {
           padding-left: 27px;
-          color: inherit;
         }
       }
       .el-submenu {
+        color: #909090;
         i {
           margin-right: 25px;
           padding-left: 15px;
-          color: inherit;
+        }
+        span {
+          color: #909090;
         }
       }
     }
@@ -455,13 +647,61 @@ export default {
   .el-footer {
     // height:10%;
   }
-  .active {
-    /deep/.el-aside {
-      width: 100px;
+  // 点击收起左侧导航栏
+  .leftNavPutAway {
+    .el-aside {
+      transition: all 0.3s;
+      .tac {
+        .title {
+          padding-left: 20px;
+          h2 {
+            display: none;
+          }
+        }
+        .el-submenu {
+          i {
+            padding-left: 0;
+            margin-right: 0;
+          }
+          span {
+            display: none;
+          }
+          /deep/.el-submenu__icon-arrow {
+            display: none;
+          }
+          /deep/.el-submenu__title {
+            padding: 0;
+          }
+          .el-menu-item-group {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  .active{
+    background-color: #7aa9ff;
+    color:#fff;
+  }
+  // 搜索校区
+  /deep/.el-dialog {
+    float: right;
+    width: 300px;
+    .select-school-content {
+      height: 50px;
+    }
+    .el-input__inner {
+      height: 30px;
+    }
+    .el-dialog__header {
+      padding: 10px 20px;
+    }
+    .el-dialog__body {
+      padding: 10px 20px 0 20px;
     }
   }
 }
-@media only screen  and (max-width: 992px) {
+@media only screen and (max-width: 992px) {
   .el-aside {
     display: none;
   }
@@ -473,12 +713,12 @@ export default {
         top: 0px;
         left: 35%;
       }
-      .logo::after{
+      .logo::after {
         display: none;
       }
-      .header-right-user{
+      .header-right-user {
         padding-right: 0 !important;
-        .user-btn{
+        .user-select {
           margin-left: 0 !important;
           padding-right: 0 !important;
         }
@@ -491,7 +731,6 @@ export default {
           span {
             display: none;
           }
-         
         }
       }
     }

@@ -3,9 +3,18 @@
     <!-- 常用导航栏 -->
     <div class="frequently">
       <div class="frequently-nav" v-for="(item,index) in nav" :key="index">
-        <div class="frequently-nav-img" @mouseenter="yiru(index)" @mouseleave="yichu()">
+        <div
+          class="frequently-nav-img"
+          @mouseenter="frequentlyEnter(index)"
+          @mouseleave="frequentlyLeave()"
+        >
           <transition name="miniimg">
-            <img :src="item.img" alt :class="{active:index === idex}" />
+            <img
+              :src="item.img"
+              alt
+              :class="{active:index === idex}"
+              @click="freaquentlyNavClick(item.id)"
+            />
           </transition>
         </div>
         <div>{{item.navtext}}</div>
@@ -13,11 +22,11 @@
     </div>
     <!-- 公告 -->
     <div class="notice">
-      <i>喇叭</i>
+      <i></i>
       <div class="noticetext">
         <span>暂无公告</span>
       </div>
-      <span>+</span>
+      <span></span>
     </div>
 
     <!-- 预警 -->
@@ -29,7 +38,7 @@
             <span>课时预警</span>
             <span>请假预警</span>
             <i>
-              <!-- <img src="@/public/images/shuaxin.png" alt /> -->
+              <!-- <img src="../../public/images/shuaxin.png" alt /> -->
             </i>
           </div>
           <div class="data-warning-titleRecord">
@@ -45,7 +54,7 @@
           <div class="sort-warning-titleLeft">
             <span>排课预警</span>
             <i>
-              <!-- <img src="@/public/images/shuaxin.png" alt /> -->
+              <!-- <img src="../../public/images/shuaxin.png" alt /> -->
             </i>
           </div>
           <div class="sort-warning-titleRecord">
@@ -56,20 +65,20 @@
         <div class="sort-warning-content">暂无预警</div>
       </div>
       <!-- 流失预警 -->
-      <div class="lose-warnin">
-        <div class="lose-warnin-title">
-          <div class="lose-warnin-titleLeft">
+      <div class="lose-warning">
+        <div class="lose-warning-title">
+          <div class="lose-warning-titleLeft">
             <span>流失预警</span>
             <i>
-              <!-- <img src="@/public/images/shuaxin.png" alt /> -->
+              <!-- <img src="../../public/images/shuaxin.png" alt /> -->
             </i>
           </div>
-          <div class="lose-warnin-titleRecord">
+          <div class="lose-warning-titleRecord">
             <span>共0记录</span>
             <i></i>
           </div>
         </div>
-        <div class="lose-warnin-content">暂无预警</div>
+        <div class="lose-warning-content">暂无预警</div>
       </div>
     </div>
 
@@ -80,11 +89,11 @@
         <div class="await-remind-title">
           <div class="await-remind-titleLeft">
             <i>
-              <img src="@/public/images/daiban.png" alt />
+              <img src="../../public/images/daiban.png" alt />
             </i>
             <span>待办提醒</span>
             <i class="refresh">
-              <img src="@/public/images/shuaxin.png" alt />
+              <img src="../../public/images/shuaxin.png" alt />
             </i>
           </div>
           <div class="await-remind-titleRecord">
@@ -107,11 +116,11 @@
         <div class="hear-remind-title">
           <div class="hear-remind-titleLeft">
             <i>
-              <img src="@/public/images/daiban.png" alt />
+              <img src="../../public/images/daiban.png" alt />
             </i>
             <span>待办提醒</span>
             <i class="refresh">
-              <img src="@/public/images/shuaxin.png" alt />
+              <img src="../../public/images/shuaxin.png" alt />
             </i>
           </div>
           <div class="hear-remind-titleRecord">
@@ -134,11 +143,11 @@
         <div class="happy-remind-title">
           <div class="happy-remind-titleLeft">
             <i>
-              <img src="@/public/images/daiban.png" alt />
+              <img src="../../public/images/daiban.png" alt />
             </i>
             <span>待办提醒</span>
             <i class="refresh">
-              <img src="@/public/images/shuaxin.png" alt />
+              <img src="../../public/images/shuaxin.png" alt />
             </i>
           </div>
           <div class="happy-remind-titleRecord">
@@ -289,11 +298,15 @@ export default {
     };
   },
   methods: {
-    yiru(index) {
+    frequentlyEnter(index) {
       this.idex = index;
     },
-    yichu() {
+    frequentlyLeave() {
       this.idex = false;
+    },
+    // 常用导航点击
+    freaquentlyNavClick(id) {
+      console.log(id);
     }
   }
 };
@@ -344,16 +357,23 @@ export default {
     position: relative;
     i {
       display: block;
+      width: 40px;
       height: 100%;
       display: flex;
       align-items: center;
-      padding-left: 20px;
-      margin-right: 15px;
+      // padding-left: 20px;
+      // margin-right: 15px;
+      background: url("../../public/images/gonggao.png") no-repeat center;
     }
     > span {
       position: absolute;
-      top: 13px;
+      top: 10px;
       right: 20px;
+      display: block;
+      width: 20px;
+      height: 20px;
+      background: url("../../public/images/bigup.png") no-repeat;
+      cursor: pointer;
     }
     .noticetext {
       width: 50%;
@@ -367,7 +387,7 @@ export default {
     margin-bottom: 20px;
     .data-warning,
     .sort-warning,
-    .lose-warnin {
+    .lose-warning {
       flex: 1;
       height: 300px;
       background-color: #fff;
@@ -383,7 +403,6 @@ export default {
         font-size: 12px;
         padding: 10px 10px;
         box-sizing: border-box;
-
         .data-warning-titleLeft {
           float: left;
           height: 100%;
@@ -413,6 +432,8 @@ export default {
       }
 
       .data-warning-content {
+        line-height: 260px;
+        text-align: center;
         height: 260px;
       }
     }
@@ -453,12 +474,17 @@ export default {
           }
         }
       }
+      .sort-warning-content {
+        line-height: 260px;
+        text-align: center;
+        height: 260px;
+      }
     }
     //流失预警
-    .lose-warnin {
+    .lose-warning {
       margin-right: 0;
 
-      .lose-warnin-title {
+      .lose-warning-title {
         height: 40px;
         background-color: #ffd7d7;
         border-radius: 5px 5px 0 0;
@@ -466,7 +492,7 @@ export default {
         padding: 10px 10px;
         box-sizing: border-box;
 
-        .lose-warnin-titleLeft {
+        .lose-warning-titleLeft {
           float: left;
           height: 100%;
           display: flex;
@@ -482,7 +508,7 @@ export default {
           }
         }
 
-        .lose-warnin-titleRecord {
+        .lose-warning-titleRecord {
           float: right;
           height: 100%;
           display: flex;
@@ -492,6 +518,11 @@ export default {
             cursor: pointer;
           }
         }
+      }
+      .lose-warning-content{
+        line-height: 260px;
+        text-align: center;
+        height: 260px;
       }
     }
   }
@@ -811,23 +842,8 @@ export default {
 .active {
   width: 80% !important;
   height: 80% !important;
+  transition: all 0.3s;
 }
-.miniimg-enter-active {
-  transition: width 2s;
-}
-.miniimg-leave-active {
-  transition: width 2s;
-}
-// .clearfix:after {
-//   content: "";
-//   display: block;
-//   height: 0;
-//   clear: both;
-//   visibility: hidden;
-// }
-// .clearfix {
-//   *zoom: 1;
-// }
 @media only screen and (max-width: 992px) {
   .remind {
     display: block !important;
