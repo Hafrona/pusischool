@@ -35,7 +35,7 @@
       <div class="data-warning">
         <div class="data-warning-title">
           <div class="data-warning-titleLeft">
-            <span>课时预警</span>
+            <span class="dataWarningActive">课时预警</span>
             <span>请假预警</span>
             <i>
               <!-- <img src="../../public/images/shuaxin.png" alt /> -->
@@ -52,7 +52,7 @@
       <div class="sort-warning">
         <div class="sort-warning-title">
           <div class="sort-warning-titleLeft">
-            <span>排课预警</span>
+            <!-- <span>排课预警</span> -->
             <i>
               <!-- <img src="../../public/images/shuaxin.png" alt /> -->
             </i>
@@ -116,9 +116,10 @@
         <div class="hear-remind-title">
           <div class="hear-remind-titleLeft">
             <i>
-              <img src="../../public/images/daiban.png" alt />
+              <img src="../../public/images/shiting.png" alt />
             </i>
-            <span>待办提醒</span>
+            <span>试听提醒</span>
+            <span>诺到提醒</span>
             <i class="refresh">
               <img src="../../public/images/shuaxin.png" alt />
             </i>
@@ -143,15 +144,15 @@
         <div class="happy-remind-title">
           <div class="happy-remind-titleLeft">
             <i>
-              <img src="../../public/images/daiban.png" alt />
+              <img src="../../public/images/shengri.png" alt />
             </i>
-            <span>待办提醒</span>
+            <span>生日提醒</span>
             <i class="refresh">
               <img src="../../public/images/shuaxin.png" alt />
             </i>
           </div>
           <div class="happy-remind-titleRecord">
-            <span>今日共0条待办</span>
+            <span>三天内共0人生日</span>
             <i></i>
           </div>
         </div>
@@ -166,9 +167,9 @@
         </div>
       </div>
     </div>
-
     <!-- 学员统计 -->
     <div class="visual">
+      <!-- 左边部分学员统计情况 -->
       <div class="visual-student">
         <div class="visual-student-title">
           <div class="title-left">
@@ -178,10 +179,10 @@
           <div class="title-right">
             <div class="title-condition">
               <ul>
-                <li>学员报名情况</li>
-                <li>学员出勤情况</li>
-                <li>课消统计情况</li>
-                <li>教师绩效统计</li>
+                <li class='action'>学员报名情况</li>
+                <li class=''>学员出勤情况</li>
+                <li class=''>课消统计情况</li>
+                <li class=''>教师绩效统计</li>
               </ul>
             </div>
             <div class="title-right-apply action">
@@ -189,78 +190,116 @@
             </div>
           </div>
         </div>
-        <div class="visual-student-content"></div>
+        <div class="visual-student-content">
+          <div class="student-statistics"></div>
+        </div>
       </div>
-      <div class="visual-school">学校统计</div>
+      <!-- 右边部分学校统计情况 -->
+      <div class="visual-school">
+        <div class="visual-school-title">
+          <div class="title-left">
+            <i></i>
+            <span>学校概括统计</span>
+          </div>
+          <div class="title-right">
+            <div class="title-condition">
+              <span>绩效分数分布图</span>
+            </div>
+            <div class="title-right-apply action">
+              <span>生源来源统计图</span>
+            </div>
+          </div>
+        </div>
+        <div class="visual-school-content"></div>
+      </div>
     </div>
+    <!-- 点击常用导航弹出功能 -->
+    <workbenchNav :navindex="navIndex" v-show="navState"/>
   </div>
 </template>
 <script>
+import workbenchNav from "@/views/workbench/workbenchNav.vue";
 export default {
+  components: {
+    workbenchNav
+  },
   data() {
     return {
       show: false,
       idex: "",
+      // 导航栏数据
+      navIndex: 1,
+      navState:true,
       nav: [
         {
           navtext: "咨询登记",
           img:
             "http://sp1.xiao360.com/static/ui/pc/t/default/register-fast.png",
-          id: 1
+          id: 1,
+          workbenchNav: false
         },
         {
           navtext: "客户登记",
           img:
             "http://sp1.xiao360.com/static/ui/pc/t/default/register-fast.png",
-          id: 2
+          id: 2,
+          workbenchNav: false
         },
         {
           navtext: "新生报到",
           img:
             "http://sp1.xiao360.com/static/ui/pc/t/default/register-fast.png",
-          id: 3
+          id: 3,
+          workbenchNav: false
         },
         {
           navtext: "老生缴费",
           img:
             "http://sp1.xiao360.com/static/ui/pc/t/default/register-fast.png",
-          id: 4
+          id: 4,
+          workbenchNav: false
         },
         {
           navtext: "考勤",
           img:
             "http://sp1.xiao360.com/static/ui/pc/t/default/register-fast.png",
-          id: 5
+          id: 5,
+          workbenchNav: false
         },
         {
           navtext: "结转",
           img:
             "http://sp1.xiao360.com/static/ui/pc/t/default/register-fast.png",
-          id: 6
+          id: 6,
+          workbenchNav: false
         },
         {
           navtext: "退费",
           img:
             "http://sp1.xiao360.com/static/ui/pc/t/default/register-fast.png",
-          id: 7
+          id: 7,
+          workbenchNav: false
         },
         {
           navtext: "请假",
           img:
             "http://sp1.xiao360.com/static/ui/pc/t/default/register-fast.png",
-          id: 8
+          id: 8,
+          workbenchNav: false
         },
         {
           navtext: "发短信",
           img:
             "http://sp1.xiao360.com/static/ui/pc/t/default/register-fast.png",
-          id: 9
+          id: 9,
+          workbenchNav: false
         },
         {
           navtext: "发微信",
           img:
             "http://sp1.xiao360.com/static/ui/pc/t/default/register-fast.png",
-          id: 10
+          id: 10,
+          workbenchNav: false
         }
       ],
       tableData: [
@@ -306,8 +345,50 @@ export default {
     },
     // 常用导航点击
     freaquentlyNavClick(id) {
-      console.log(id);
+      // this.navIndex = id;
+      // this.nav.map(item => {
+      //   if (item.id === id) {
+      //     this.navState = true
+      //   }
+      // });
+    },
+    // 数据统计图
+    drawLine() {
+      let myChart = this.$echarts.init(
+        document.querySelector(".student-statistics")
+      );
+      myChart.setOption({
+        title: { text: "" },
+        tooltip: {},
+        xAxis: {
+          data: [
+            "1月",
+            "2月",
+            "3月",
+            "4月",
+            "5月",
+            "6月",
+            "7月",
+            "8月",
+            "9月",
+            "10月",
+            "11月",
+            "12月"
+          ]
+        },
+        yAxis: {},
+        series: [
+          {
+            name: "销量",
+            type: "bar",
+            data: [5, 20, 36, 10, 10, 20, 30, 14, 52, 18, 25, 36]
+          }
+        ]
+      });
     }
+  },
+  mounted() {
+    this.drawLine();
   }
 };
 </script>
@@ -410,8 +491,12 @@ export default {
           align-items: center;
 
           span {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            align-items: center;
             cursor: pointer;
-            margin-right: 10px;
+            margin-right: 5px;
           }
 
           i {
@@ -424,7 +509,6 @@ export default {
           height: 100%;
           display: flex;
           align-items: center;
-
           span {
             cursor: pointer;
           }
@@ -519,7 +603,7 @@ export default {
           }
         }
       }
-      .lose-warning-content{
+      .lose-warning-content {
         line-height: 260px;
         text-align: center;
         height: 260px;
@@ -604,9 +688,6 @@ export default {
             }
           }
         }
-        // .el-table {
-        //   height: 0;
-        // }
       }
     }
     .hear-remind {
@@ -626,7 +707,7 @@ export default {
           align-items: center;
           span {
             color: #666;
-            margin-right: 10px;
+            margin-right: 5px;
           }
           .refresh {
             cursor: pointer;
@@ -766,6 +847,7 @@ export default {
     height: 400px;
     width: 100%;
     display: flex;
+    // 学员统计情况
     .visual-student {
       flex: 2;
       background-color: #fff;
@@ -826,11 +908,60 @@ export default {
           }
         }
       }
+      .visual-student-content {
+        width: 100%;
+        height: 100%;
+        .student-statistics {
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
+    // 学员概括情况
     .visual-school {
       flex: 1;
       background-color: #fff;
       border-radius: 5px;
+      .visual-school-title {
+        display: flex;
+        height: 20px;
+        font-size: 12px;
+        padding-left: 18px;
+        padding: 10px;
+        justify-content: space-between;
+        .title-left {
+          height: 20px;
+          display: flex;
+          align-items: center;
+          color: #666;
+          span {
+            color: inherit;
+          }
+        }
+        .title-right {
+          display: flex;
+          height: 20px;
+          .title-condition {
+            flex: 2;
+            height: 100%;
+            display: flex;
+            align-items: center;
+          }
+          .title-right-apply {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 15px;
+            span {
+              display: block;
+              height: 100%;
+              line-height: 20px;
+              padding: 0 5px;
+            }
+          }
+        }
+      }
     }
     .action {
       background-color: #4284fc;
@@ -843,6 +974,10 @@ export default {
   width: 80% !important;
   height: 80% !important;
   transition: all 0.3s;
+}
+.dataWarningActive {
+  color: #656565;
+  border-bottom: 1px solid #656565;
 }
 @media only screen and (max-width: 992px) {
   .remind {

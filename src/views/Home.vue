@@ -11,10 +11,32 @@
           <div class="header-left-search">
             <i @click="packUp"></i>
             <div class="search-input">
-              <input type="text" placeholder="搜索功能/学员" v-model="searchValue" />
+              <input type="text" placeholder="搜索功能/学员" v-model="searchValue" @click="panel=!panel" />
               <i></i>
+              <!-- 点击搜索功能展开面板 -->
+              <transition name='searchPanel'>
+                <div class="search-panel" v-if="panel">
+                  <ul>
+                    <li>
+                      <span>学</span>
+                      <span>员</span>
+                    </li>
+                    <li>
+                      <span>客</span>
+                      <span>户</span>
+                    </li>
+                    <li>
+                      <span>班</span>
+                      <span>级</span>
+                    </li>
+                  </ul>
+                  <div class="search-panel-content">你好</div>
+                </div>
+              </transition>
+              <!-- 搜索功能展开之后的遮罩层 -->
+              <div class="search-mask" v-if="panel" @click="panel = false"></div>
             </div>
-            <span @click="dialogTableVisible = true"></span>
+            <span class="search-assignment" @click="dialogTableVisible = true"></span>
           </div>
           <!-- header右边区域 -->
           <div class="header-right-user">
@@ -36,30 +58,33 @@
                   <span>蒜头王八</span>
                   <i class="user-trilateral"></i>
                 </span>
+                <!-- 用户状态，个人信息 -->
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item icon="">我的个人资料</el-dropdown-item>
-                  <el-dropdown-item icon="">我的文件</el-dropdown-item>
-                  <el-dropdown-item icon="">我的角色权限</el-dropdown-item>
-                  <el-dropdown-item icon="">交班交款</el-dropdown-item>
-                  <el-dropdown-item icon="">业绩排行</el-dropdown-item>
-                  <el-dropdown-item icon="">我的业绩</el-dropdown-item>
-                  <el-dropdown-item icon="">新手引导</el-dropdown-item>
-                  <el-dropdown-item icon="">设置导航</el-dropdown-item>
-                  <el-dropdown-item icon="">关于</el-dropdown-item>
-                  <el-dropdown-item icon="">锁定屏幕</el-dropdown-item>
-                  <el-dropdown-item icon="">退出</el-dropdown-item>
+                  <el-dropdown-item icon><router-link to="">我的个人资料</router-link></el-dropdown-item>
+                  <el-dropdown-item icon><router-link to="">我的文件</router-link></el-dropdown-item>
+                  <el-dropdown-item icon><router-link to="">我的角色权限</router-link></el-dropdown-item>
+                  <el-dropdown-item icon><router-link to="">交班交款</router-link></el-dropdown-item>
+                  <el-dropdown-item icon><router-link to="">业绩排行</router-link></el-dropdown-item>
+                  <el-dropdown-item icon><router-link to="">我的业绩</router-link></el-dropdown-item>
+                  <el-dropdown-item icon><router-link to="">新手引导</router-link></el-dropdown-item>
+                  <el-dropdown-item icon><router-link to="">设置导航</router-link></el-dropdown-item>
+                  <el-dropdown-item icon><router-link to="">关于</router-link></el-dropdown-item>
+                  <el-dropdown-item icon><router-link to="">锁定屏幕</router-link></el-dropdown-item>
+                  <el-dropdown-item icon><router-link to="">退出</router-link></el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
-            <!-- 用户状态 -->
+            <!-- 考勤看板区 -->
             <div class="user-status">
               <i @click="rightAside = !rightAside"></i>
             </div>
           </div>
           <!-- 点击选择校区打开弹框 -->
           <el-dialog title="选择校区" :visible.sync="selectSchool" class="select-school">
-            <el-input></el-input>
-            <div class="select-school-content">众来达教育</div>
+            <el-input placeholder="按校区名称过滤"></el-input>
+            <div class="select-school-content">
+              <router-link to="">众来达教育</router-link>
+            </div>
             <div slot="footer" class="dialog-footer">
               <el-button type="primary" @click="selectSchool = false">确 定</el-button>
               <el-button @click="selectSchool = false">取 消</el-button>
@@ -111,7 +136,7 @@
         <el-aside :width="width">
           <el-row class="tac">
             <el-col :span="24">
-              <div class="title" :class="{active:leftNav}" @click='leftNavWorkbench'>
+              <div class="title" :class="{active:leftNav}" @click="leftNavWorkbench">
                 <router-link to="/home/workbench">
                   <i class="el-icon-location"></i>
                   <h2>工作台</h2>
@@ -125,7 +150,7 @@
                 @select="slct"
                 active-text-color="#fff"
                 :unique-opened="true"
-                text-color='#909090'
+                text-color="#909090"
               >
                 <el-submenu index="1">
                   <template slot="title">
@@ -246,9 +271,9 @@
           </el-breadcrumb>
           <router-view></router-view>
         </el-main>
-        <!-- <transition name="asideRight"> -->
-        <el-aside v-show="rightAside">右边</el-aside>
-        <!-- </transition> -->
+        <transition name="asideRight">
+          <el-aside v-show="rightAside">右边</el-aside>
+        </transition>
       </el-container>
       <!-- 底部 -->
       <el-footer>Footer</el-footer>
@@ -257,34 +282,34 @@
 </template>
 
 <script>
-import { log } from 'util';
+import { log } from "util";
 export default {
   data() {
     return {
+      // 判断搜索功能
+      panel: false,
       // 用于判断左侧导航栏
-      leftNav:false,
+      leftNav: false,
       // 我的任务
       radio: 3,
       // 总条数
-      pageNumber:10,
+      pageNumber: 10,
       // 一页显示条数
-      pageSize:5,
-      assignmentData:[
-        {text:'没有数据',id:'1'},
-        {text:'没有数据',id:'2'},
-        {text:'没有数据',id:'3'},
-        {text:'没有数据',id:'4'},
-        {text:'没有数据',id:'5'},
-        {text:'没有数据',id:'6'},
-        {text:'没有数据',id:'7'},
-        {text:'没有数据',id:'8'},
-        {text:'没有数据',id:'9'},
-        {text:'没有数据',id:'10'},
+      pageSize: 5,
+      // 我的任务数据
+      assignmentData: [
+        { text: "没有数据", id: "1" },
+        { text: "没有数据", id: "2" },
+        { text: "没有数据", id: "3" },
+        { text: "没有数据", id: "4" },
+        { text: "没有数据", id: "5" }
       ],
+      // 搜索功能/学员数据绑定
       searchValue: "",
-      isShow: false,
+      // 判断点击收起左侧导航栏
       pack: false,
       width: "300px",
+      // 判断点击展开右侧考勤看板区
       rightAside: false,
       // 我的任务
       dialogTableVisible: false,
@@ -311,28 +336,6 @@ export default {
         }
       ],
       selectSchool: false,
-      gridData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        }
-      ],
       currentPage2: 5
     };
   },
@@ -362,9 +365,11 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
-    leftNavWorkbench(){
+    leftNavWorkbench() {
       this.leftNav = true;
-    }
+    },
+    // 搜索功能展开
+    searchInputFocus() {}
   }
 };
 </script>
@@ -401,6 +406,7 @@ export default {
         bottom: -2px;
         left: 0px;
       }
+      // 头部左边部分
       .header-left-search {
         display: flex;
         align-items: center;
@@ -434,8 +440,48 @@ export default {
             top: 3px;
             right: 0px;
           }
+          // 点击搜索展开仪表盘
+          .search-panel {
+            width: 450px;
+            height: 265px;
+            z-index: 1200;
+            position: absolute;
+            top: 35px;
+            left: 0px;
+            box-shadow: 0px 1px 5px #999;
+            display: flex;
+            background-color: rgba(255,255,255,.9);
+            ul {
+              width: 10%;
+              border-right: 1px solid #eee;
+              background-color: #fff;
+              li {
+                display: flex;
+                height: 33.3%;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                span {
+                  padding: 5px 0;
+                }
+              }
+            }
+            .search-panel-content {
+              width: 90%;
+              padding:15px;
+            }
+          }
+          .search-mask {
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+          }
         }
-        span {
+        .search-assignment {
           cursor: pointer;
           display: inline-block;
           width: 24px;
@@ -443,6 +489,7 @@ export default {
           background-image: url("../../public/images/tongzhi.png");
         }
       }
+      // 右边用户部分
       .header-right-user {
         display: flex;
         height: 100%;
@@ -549,7 +596,7 @@ export default {
           top: 0px;
           left: 30%;
         }
-        .el-radio-group{
+        .el-radio-group {
           margin-bottom: 10px;
         }
         .assignment-from {
@@ -562,13 +609,13 @@ export default {
               line-height: 40px;
               border-radius: 4px;
               font-size: 12px;
-              tr{
+              tr {
                 display: flex;
 
-                th{
-                  flex:2;
-                  &:nth-child(6){
-                    flex:4;
+                th {
+                  flex: 2;
+                  &:nth-child(6) {
+                    flex: 4;
                     text-align: right;
                     padding-right: 30px;
                   }
@@ -576,22 +623,22 @@ export default {
               }
             }
             .assignment-table-tbody {
-              tr{
+              tr {
                 height: 40px;
-                border-bottom:1px solid #e5e5e5;
+                border-bottom: 1px solid #e5e5e5;
                 text-align: center;
                 line-height: 40px;
-                td{
+                td {
                 }
               }
             }
           }
         }
         // 分页
-        .el-pagination{
+        .el-pagination {
           display: flex;
           justify-content: flex-end;
-          padding:10px 0;
+          padding: 10px 0;
         }
       }
     }
@@ -679,27 +726,58 @@ export default {
       }
     }
   }
-  .active{
+  .active {
     background-color: #7aa9ff;
-    color:#fff;
+    color: #fff;
   }
   // 搜索校区
   /deep/.el-dialog {
     float: right;
-    width: 300px;
+    width: 250px;
     .select-school-content {
       height: 50px;
+      padding-top:5px;
+      box-sizing: border-box;
+      a{
+        display:block;
+        width: 100%;
+        height: 20px;
+        line-height: 20px;
+        padding-left: 5px;
+      }
+    }
+    .el-dialog__headerbtn{
+      position: absolute;
+      top:12px;
+      right:10px;
     }
     .el-input__inner {
       height: 30px;
     }
     .el-dialog__header {
-      padding: 10px 20px;
+      padding: 10px 5px;
+      span{
+        font-size: 14px;
+      }
     }
     .el-dialog__body {
-      padding: 10px 20px 0 20px;
+      padding: 10px 5px 0 5px;
+    }
+    .el-dialog__footer{
+      padding:10px 5px;
+      button{
+        width: 46px;
+        height: 28px;
+        padding:0;
+      }
     }
   }
+}
+.searchPanel-enter-active, .searchPaneld-leave-active {
+  transition: opacity .5s;
+}
+.searchPanel-enter, .searchPanel-leave-to{
+  opacity: 0;
 }
 @media only screen and (max-width: 992px) {
   .el-aside {
