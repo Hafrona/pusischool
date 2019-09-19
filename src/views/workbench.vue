@@ -32,29 +32,33 @@
     <!-- 预警 -->
     <div class="early-warning">
       <!-- 课时预警 -->
-      <div class="data-warning">
-        <div class="data-warning-title">
-          <div class="data-warning-titleLeft">
-            <span class="dataWarningActive">课时预警</span>
-            <span>请假预警</span>
+      <div class="time-warning">
+        <div class="time-warning-title">
+          <div class="time-warning-titleLeft">
+            <span
+              v-for="(item,index) in timeWarningText"
+              :key="index"
+              @click="timeWarningSelect(index)"
+              :class="{timeWarningActive:index === timeIndex}"
+            >{{item.name}}</span>
             <i>
-              <!-- <img src="../../public/images/shuaxin.png" alt /> -->
+              <img src="../../public/images/shuaxin.png" alt />
             </i>
           </div>
-          <div class="data-warning-titleRecord">
+          <div class="time-warning-titleRecord">
             <span>共0记录</span>
             <i></i>
           </div>
         </div>
-        <div class="data-warning-content">暂无预警</div>
+        <div class="time-warning-content">暂无预警</div>
       </div>
       <!-- 排课预警 -->
       <div class="sort-warning">
         <div class="sort-warning-title">
           <div class="sort-warning-titleLeft">
-            <!-- <span>排课预警</span> -->
+            <span>排课预警</span>
             <i>
-              <!-- <img src="../../public/images/shuaxin.png" alt /> -->
+              <img src="../../public/images/shuaxin.png" alt />
             </i>
           </div>
           <div class="sort-warning-titleRecord">
@@ -70,7 +74,7 @@
           <div class="lose-warning-titleLeft">
             <span>流失预警</span>
             <i>
-              <!-- <img src="../../public/images/shuaxin.png" alt /> -->
+              <img src="../../public/images/shuaxin.png" alt />
             </i>
           </div>
           <div class="lose-warning-titleRecord">
@@ -118,8 +122,12 @@
             <i>
               <img src="../../public/images/shiting.png" alt />
             </i>
-            <span>试听提醒</span>
-            <span>诺到提醒</span>
+            <span
+              v-for="(item,index) in hearRemind"
+              :key="index"
+              @click="remindClick(index)"
+              :class="{timeWarningActive:index === remindIndex}"
+            >{{item.text}}</span>
             <i class="refresh">
               <img src="../../public/images/shuaxin.png" alt />
             </i>
@@ -167,7 +175,7 @@
         </div>
       </div>
     </div>
-    <!-- 学员统计 -->
+    <!-- 统计 -->
     <div class="visual">
       <!-- 左边部分学员统计情况 -->
       <div class="visual-student">
@@ -179,15 +187,16 @@
           <div class="title-right">
             <div class="title-condition">
               <ul>
-                <li class='action'>学员报名情况</li>
-                <li class=''>学员出勤情况</li>
-                <li class=''>课消统计情况</li>
-                <li class=''>教师绩效统计</li>
+                <li
+                  v-for="(item,index) in studentTitle"
+                  :key="index"
+                  @click="studenStatistics(index)"
+                  :class="{visualAction:index === studentIndex}"
+                >{{item.text}}</li>
               </ul>
             </div>
-            <div class="title-right-apply action">
-              <span>学生入校参观和报名人数统计表</span>
-            </div>
+            <!-- <div class="title-right-apply action">
+            </div>-->
           </div>
         </div>
         <div class="visual-student-content">
@@ -203,10 +212,12 @@
           </div>
           <div class="title-right">
             <div class="title-condition">
-              <span>绩效分数分布图</span>
-            </div>
-            <div class="title-right-apply action">
-              <span>生源来源统计图</span>
+              <span
+                v-for="(item,index) in schoolTitle"
+                :key="index"
+                @click="schoolStatistics(index)"
+                :class="{visualAction:index === schoolIndex}"
+              >{{item.text}}</span>
             </div>
           </div>
         </div>
@@ -214,7 +225,7 @@
       </div>
     </div>
     <!-- 点击常用导航弹出功能 -->
-    <workbenchNav :navindex="navIndex" v-show="navState"/>
+    <workbenchNav :navindex="navIndex" v-show="navState" />
   </div>
 </template>
 <script>
@@ -227,9 +238,16 @@ export default {
     return {
       show: false,
       idex: "",
-      // 导航栏数据
+      // 咨询登记判断
+      navState: false,
+      // 课时预警
+      timeWarningText: [
+        { name: "课时预警", id: 1 },
+        { name: "请假预警", id: 2 }
+      ],
+      timeIndex: 0,
+      // 常用导航栏数据
       navIndex: 1,
-      navState:true,
       nav: [
         {
           navtext: "咨询登记",
@@ -302,6 +320,24 @@ export default {
           workbenchNav: false
         }
       ],
+      //学员统计情况
+      studentTitle: [
+        { text: "学员统计情况", id: 1 },
+        { text: "学员出勤情况", id: 2 },
+        { text: "课消统计情况", id: 3 },
+        { text: "教师绩效统计", id: 4 },
+        { text: "学生入校参观和报名人数统计表", id: 5 }
+      ],
+      studentIndex: 0,
+      //学校统计情况
+      schoolTitle: [
+        { text: "绩效分数分布图", id: 1 },
+        { text: "生源来源统计图", id: 2 }
+      ],
+      schoolIndex: 0,
+      //试听提醒
+      hearRemind: [{ text: "试听提醒", id: 1 }, { text: "诺到提醒", id: 2 }],
+      remindIndex: 0,
       tableData: [
         {
           date: "2016-05-02",
@@ -385,6 +421,22 @@ export default {
           }
         ]
       });
+    },
+    // 课时预警
+    timeWarningSelect(index) {
+      this.timeIndex = index;
+    },
+    //学员统计情况
+    studenStatistics(index) {
+      this.studentIndex = index;
+    },
+    //学校统计情况
+    schoolStatistics(index) {
+      this.schoolIndex = index;
+    },
+    //试听提醒
+    remindClick(index) {
+      this.remindIndex = index;
     }
   },
   mounted() {
@@ -466,7 +518,7 @@ export default {
     width: 100%;
     display: flex;
     margin-bottom: 20px;
-    .data-warning,
+    .time-warning,
     .sort-warning,
     .lose-warning {
       flex: 1;
@@ -476,15 +528,15 @@ export default {
       border-radius: 5px;
     }
     // 课时预警
-    .data-warning {
-      .data-warning-title {
+    .time-warning {
+      .time-warning-title {
         height: 40px;
         background-color: #d7edff;
         border-radius: 5px 5px 0 0;
         font-size: 12px;
         padding: 10px 10px;
         box-sizing: border-box;
-        .data-warning-titleLeft {
+        .time-warning-titleLeft {
           float: left;
           height: 100%;
           display: flex;
@@ -504,7 +556,7 @@ export default {
           }
         }
 
-        .data-warning-titleRecord {
+        .time-warning-titleRecord {
           float: right;
           height: 100%;
           display: flex;
@@ -515,7 +567,7 @@ export default {
         }
       }
 
-      .data-warning-content {
+      .time-warning-content {
         line-height: 260px;
         text-align: center;
         height: 260px;
@@ -538,7 +590,6 @@ export default {
           align-items: center;
 
           span {
-            cursor: pointer;
             margin-right: 10px;
           }
 
@@ -583,7 +634,6 @@ export default {
           align-items: center;
 
           span {
-            cursor: pointer;
             margin-right: 10px;
           }
 
@@ -706,8 +756,12 @@ export default {
           display: flex;
           align-items: center;
           span {
-            color: #666;
+            color: #909090;
             margin-right: 5px;
+            display: flex;
+            height: 100%;
+            align-items: center;
+            cursor: pointer;
           }
           .refresh {
             cursor: pointer;
@@ -875,6 +929,7 @@ export default {
           .title-condition {
             flex: 2;
             height: 100%;
+            display: flex;
             ul {
               height: 100%;
               display: flex;
@@ -891,19 +946,6 @@ export default {
                   margin-right: 0;
                 }
               }
-            }
-          }
-          .title-right-apply {
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 15px;
-            span {
-              display: block;
-              height: 100%;
-              line-height: 20px;
-              padding: 0 5px;
             }
           }
         }
@@ -946,24 +988,19 @@ export default {
             height: 100%;
             display: flex;
             align-items: center;
-          }
-          .title-right-apply {
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 15px;
             span {
-              display: block;
+              display: flex;
               height: 100%;
-              line-height: 20px;
               padding: 0 5px;
+              margin-left: 15px;
+              align-items: center;
+              cursor: pointer;
             }
           }
         }
       }
     }
-    .action {
+    .visualAction {
       background-color: #4284fc;
       border-radius: 5px;
       color: #fff;
@@ -975,8 +1012,8 @@ export default {
   height: 80% !important;
   transition: all 0.3s;
 }
-.dataWarningActive {
-  color: #656565;
+.timeWarningActive {
+  color: #656565 !important;
   border-bottom: 1px solid #656565;
 }
 @media only screen and (max-width: 992px) {
@@ -995,7 +1032,7 @@ export default {
   .early-warning {
     width: 100%;
     display: block !important;
-    .data-warning {
+    .time-warning {
       width: 100%;
       margin-bottom: 10px;
     }
