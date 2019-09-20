@@ -28,7 +28,6 @@
       </div>
       <span></span>
     </div>
-
     <!-- 预警 -->
     <div class="early-warning">
       <!-- 课时预警 -->
@@ -85,7 +84,6 @@
         <div class="lose-warning-content">暂无预警</div>
       </div>
     </div>
-
     <!-- 提醒部分 -->
     <div class="remind">
       <!-- 待办提醒 -->
@@ -380,7 +378,7 @@ export default {
       this.idex = false;
     },
     // 常用导航点击
-    freaquentlyNavClick(id) {
+    freaquentlyNavClick() {
       // this.navIndex = id;
       // this.nav.map(item => {
       //   if (item.id === id) {
@@ -950,14 +948,10 @@ export default {
           }
         }
       }
-      .visual-student-content {
-        width: 100%;
-        height: 100%;
-        .student-statistics {
-          width: 100%;
-          height: 100%;
-        }
-      }
+      // .visual-student-content {
+      //   .student-statistics {
+      //   }
+      // }
     }
     // 学员概括情况
     .visual-school {
