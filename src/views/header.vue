@@ -225,11 +225,16 @@ export default {
       }
     },
     // 点击删除标签
+    nihao(data,index){
+        console.log(data,index)
+    },
     disposeDelete() {
+        this.nihao(123,564)
       this.panelLabelDelete = !this.panelLabelDelete;
-    //   if(this.redactValue === '完成'){
-    //       this.redactValue = '编辑'
-    //   }
+      if(this.redactValue === '完成'){
+          this.redactValue = '编辑'
+          this.panelLabelRedact = false
+      }
       if (this.panelLabelDelete) {
         this.deleteValue = "完成";
       } else {
@@ -242,9 +247,10 @@ export default {
     },
     redact() {
       this.panelLabelRedact = !this.panelLabelRedact;
-    //   if(this.deleteValue === '完成'){
-    //       this.deleteValue = '删除'
-    //   }
+      if(this.deleteValue === '完成'){
+          this.deleteValue = '删除'
+          this.panelLabelDelete = false
+      }
       if (this.panelLabelRedact) {
         this.redactValue = "完成";
       } else {
