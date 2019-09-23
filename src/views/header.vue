@@ -225,15 +225,11 @@ export default {
       }
     },
     // 点击删除标签
-    nihao(data,index){
-        console.log(data,index)
-    },
     disposeDelete() {
-        this.nihao(123,564)
       this.panelLabelDelete = !this.panelLabelDelete;
-      if(this.redactValue === '完成'){
-          this.redactValue = '编辑'
-          this.panelLabelRedact = false
+      if (this.redactValue === "完成") {
+        this.redactValue = "编辑";
+        this.panelLabelRedact = false;
       }
       if (this.panelLabelDelete) {
         this.deleteValue = "完成";
@@ -241,21 +237,22 @@ export default {
         this.deleteValue = "删除";
       }
     },
-    //点击展开或收起右侧考勤看板区域
-    rightAsideToggler() {
-      this.$emit("rightAside", (this.rightAside = !this.rightAside));
-    },
+    //点击编辑标签
     redact() {
       this.panelLabelRedact = !this.panelLabelRedact;
-      if(this.deleteValue === '完成'){
-          this.deleteValue = '删除'
-          this.panelLabelDelete = false
+      if (this.deleteValue === "完成") {
+        this.deleteValue = "删除";
+        this.panelLabelDelete = false;
       }
       if (this.panelLabelRedact) {
         this.redactValue = "完成";
       } else {
         this.redactValue = "编辑";
       }
+    },
+    //点击展开或收起右侧考勤看板区域
+    rightAsideToggler() {
+      this.$emit("rightAside", (this.rightAside = !this.rightAside));
     },
     // 分页
     handleSizeChange() {},
@@ -544,6 +541,50 @@ export default {
     z-index: 20;
     top: 0;
     left: 0;
+  }
+  // 搜索校区
+  .select-school {
+    /deep/.el-dialog {
+      float: right;
+      width: 250px;
+      .select-school-content {
+        height: 50px;
+        padding-top: 5px;
+        box-sizing: border-box;
+        a {
+          display: block;
+          width: 100%;
+          height: 20px;
+          line-height: 20px;
+          padding-left: 5px;
+        }
+      }
+      .el-dialog__headerbtn {
+        position: absolute;
+        top: 12px;
+        right: 10px;
+      }
+      .el-input__inner {
+        height: 30px;
+      }
+      .el-dialog__header {
+        padding: 10px 5px;
+        span {
+          font-size: 14px;
+        }
+      }
+      .el-dialog__body {
+        padding: 10px 5px 0 5px;
+      }
+      .el-dialog__footer {
+        padding: 10px 5px;
+        button {
+          width: 46px;
+          height: 28px;
+          padding: 0;
+        }
+      }
+    }
   }
   // 我的任务弹窗样式
   .assignment {

@@ -29,8 +29,6 @@ export default {
     },
     //面包屑
     getBreadcrumb() {
-      //   let matched = this.$route.matched.filter(item => item.name);
-      //   this.levelList = matched;
       let matched = this.$route.matched;
       //如果不是首页
       if (!this.isHome(matched[0])) {

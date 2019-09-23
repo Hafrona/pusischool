@@ -7,14 +7,10 @@
           class="frequently-nav-img"
           @mouseenter="frequentlyEnter(index)"
           @mouseleave="frequentlyLeave()"
+          @click="freaquentlyNavClick(item.id)"
         >
           <transition name="miniimg">
-            <img
-              :src="item.img"
-              alt
-              :class="{active:index === idex}"
-              @click="freaquentlyNavClick(item.id)"
-            />
+            <img :src="item.img" alt :class="{active:index === idex}" />
           </transition>
         </div>
         <div>{{item.navtext}}</div>
@@ -31,9 +27,9 @@
     <!-- 预警 -->
     <div class="early-warning">
       <!-- 课时预警 -->
-      <div class="time-warning">
-        <div class="time-warning-title">
-          <div class="time-warning-titleLeft">
+      <div class="hour-warning">
+        <div class="hour-warning-title">
+          <div class="hour-warning-titleLeft">
             <span
               v-for="(item,index) in timeWarningText"
               :key="index"
@@ -44,12 +40,12 @@
               <img src="../../public/images/shuaxin.png" alt />
             </i>
           </div>
-          <div class="time-warning-titleRecord">
+          <div class="hour-warning-titleRecord" @click="hourRecord">
             <span>共0记录</span>
             <i></i>
           </div>
         </div>
-        <div class="time-warning-content">暂无预警</div>
+        <div class="hour-warning-content">暂无预警</div>
       </div>
       <!-- 排课预警 -->
       <div class="sort-warning">
@@ -83,6 +79,7 @@
         </div>
         <div class="lose-warning-content">暂无预警</div>
       </div>
+      <allRecord :recordVisible='recordVisible' @recordClose='recordClose'/>
     </div>
     <!-- 提醒部分 -->
     <div class="remind">
@@ -223,27 +220,32 @@
       </div>
     </div>
     <!-- 点击常用导航弹出功能 -->
-    <workbenchNav :navindex="navIndex" v-show="navState" />
+    <!-- 点击常用导航栏，然后判断当前点击，拿到索引，根据索引的不同加载不同的内容 -->
+    <!-- <workbenchNav :navindex="navIndex" v-show="navState" @concel='navClose'/> -->
   </div>
 </template>
 <script>
-import workbenchNav from "@/views/workbench/workbenchNav.vue";
+// import workbenchNav from "@/views/workbench/workbenchNav.vue";
+import allRecord from "@/views/workbench/allRecord.vue"
 export default {
   components: {
-    workbenchNav
+    // workbenchNav,
+    allRecord
   },
   data() {
     return {
       show: false,
       idex: "",
       // 咨询登记判断
-      navState: false,
+      // navState: false,
       // 课时预警
       timeWarningText: [
         { name: "课时预警", id: 1 },
         { name: "请假预警", id: 2 }
       ],
       timeIndex: 0,
+      // 查看全部记录
+      recordVisible:false,
       // 常用导航栏数据
       navIndex: 1,
       nav: [
@@ -371,6 +373,7 @@ export default {
     };
   },
   methods: {
+    // 常用导航栏移入移出事件
     frequentlyEnter(index) {
       this.idex = index;
     },
@@ -378,13 +381,9 @@ export default {
       this.idex = false;
     },
     // 常用导航点击
-    freaquentlyNavClick() {
-      // this.navIndex = id;
-      // this.nav.map(item => {
-      //   if (item.id === id) {
-      //     this.navState = true
-      //   }
-      // });
+    freaquentlyNavClick(id) {
+      this.navIndex = id;
+      // this.navState = true;
     },
     // 数据统计图
     drawLine() {
@@ -424,6 +423,13 @@ export default {
     timeWarningSelect(index) {
       this.timeIndex = index;
     },
+    //课时预警查看全部记录
+    hourRecord(){
+      this.recordVisible = true;
+    },
+    recordClose(data){
+      this.recordVisible = data
+    },
     //学员统计情况
     studenStatistics(index) {
       this.studentIndex = index;
@@ -436,6 +442,10 @@ export default {
     remindClick(index) {
       this.remindIndex = index;
     }
+    //关闭常用导航栏弹窗
+    // navClose(data){
+    //   this.navState = data
+    // }
   },
   mounted() {
     this.drawLine();
@@ -516,7 +526,7 @@ export default {
     width: 100%;
     display: flex;
     margin-bottom: 20px;
-    .time-warning,
+    .hour-warning,
     .sort-warning,
     .lose-warning {
       flex: 1;
@@ -526,20 +536,25 @@ export default {
       border-radius: 5px;
     }
     // 课时预警
-    .time-warning {
-      .time-warning-title {
+    .hour-warning,
+    .sort-warning,
+    .lose-warning {
+      .hour-warning-title,
+      .sort-warning-title,
+      .lose-warning-title {
         height: 40px;
         background-color: #d7edff;
         border-radius: 5px 5px 0 0;
         font-size: 12px;
         padding: 10px 10px;
         box-sizing: border-box;
-        .time-warning-titleLeft {
+        .hour-warning-titleLeft,
+        .sort-warning-titleLeft,
+        .lose-warning-titleLeft {
           float: left;
           height: 100%;
           display: flex;
           align-items: center;
-
           span {
             flex: 1;
             height: 100%;
@@ -548,13 +563,14 @@ export default {
             cursor: pointer;
             margin-right: 5px;
           }
-
           i {
             cursor: pointer;
           }
         }
 
-        .time-warning-titleRecord {
+        .hour-warning-titleRecord,
+        .sort-warning-titleRecord,
+        .lose-warning-titleRecord {
           float: right;
           height: 100%;
           display: flex;
@@ -565,7 +581,9 @@ export default {
         }
       }
 
-      .time-warning-content {
+      .hour-warning-content,
+      .sort-warning-content,
+      .lose-warning-content {
         line-height: 260px;
         text-align: center;
         height: 260px;
@@ -574,87 +592,26 @@ export default {
     //排课预警
     .sort-warning {
       .sort-warning-title {
-        height: 40px;
         background-color: #ffedd7;
-        border-radius: 5px 5px 0 0;
-        font-size: 12px;
-        padding: 10px 10px;
-        box-sizing: border-box;
-
         .sort-warning-titleLeft {
-          float: left;
-          height: 100%;
-          display: flex;
-          align-items: center;
-
           span {
+            cursor: text;
             margin-right: 10px;
           }
-
-          i {
-            cursor: pointer;
-          }
         }
-
-        .sort-warning-titleRecord {
-          float: right;
-          height: 100%;
-          display: flex;
-          align-items: center;
-
-          span {
-            cursor: pointer;
-          }
-        }
-      }
-      .sort-warning-content {
-        line-height: 260px;
-        text-align: center;
-        height: 260px;
       }
     }
     //流失预警
     .lose-warning {
       margin-right: 0;
-
       .lose-warning-title {
-        height: 40px;
         background-color: #ffd7d7;
-        border-radius: 5px 5px 0 0;
-        font-size: 12px;
-        padding: 10px 10px;
-        box-sizing: border-box;
-
         .lose-warning-titleLeft {
-          float: left;
-          height: 100%;
-          display: flex;
-          align-items: center;
-
           span {
+            cursor: text;
             margin-right: 10px;
           }
-
-          i {
-            cursor: pointer;
-          }
         }
-
-        .lose-warning-titleRecord {
-          float: right;
-          height: 100%;
-          display: flex;
-          align-items: center;
-
-          span {
-            cursor: pointer;
-          }
-        }
-      }
-      .lose-warning-content {
-        line-height: 260px;
-        text-align: center;
-        height: 260px;
       }
     }
   }
@@ -664,171 +621,23 @@ export default {
     display: flex;
     border-radius: 5px;
     margin-bottom: 20px;
-    .await-remind {
-      flex: 1;
-      background-color: #fff;
-      height: 100%;
-      border-radius: 5px 0 0 5px;
-      .await-remind-title {
-        height: 40px;
-        border-radius: 5px 5px 0 0;
-        font-size: 12px;
-        padding: 10px 20px 10px 10px;
-        box-sizing: border-box;
-        .await-remind-titleLeft {
-          float: left;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          span {
-            color: #666;
-            margin-right: 10px;
-          }
-          .refresh {
-            cursor: pointer;
-            margin-right: 0;
-          }
-          i {
-            margin-right: 10px;
-          }
-        }
-        .await-remind-titleRecord {
-          float: right;
-          height: 100%;
-          display: flex;
-          align-items: center;
-
-          span {
-            cursor: pointer;
-          }
-        }
-      }
-      .await-remind-content {
-        padding: 10px;
-        height: 260px;
-        box-sizing: border-box;
-        width: 100%;
-        position: relative;
-        i {
-          display: inline-block;
-          width: 2px;
-          height: 85%;
-          background-color: #eee;
-          position: absolute;
-          top: 12px;
-          right: 0px;
-        }
-        .tabledata {
-          width: 100%;
-          height: 100%;
-          font-size: 12px;
-          tr {
-            width: 100%;
-            border-bottom: 1px solid #e5e5e5;
-            height: 33px;
-            line-height: 33px;
-            display: flex;
-            td {
-              flex: 1;
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-            }
-          }
-        }
-      }
-    }
-    .hear-remind {
-      flex: 1;
-      background-color: #fff;
-      height: 100%;
-      .hear-remind-title {
-        height: 40px;
-        border-radius: 5px 5px 0 0;
-        font-size: 12px;
-        padding: 10px 20px 10px 10px;
-        box-sizing: border-box;
-        .hear-remind-titleLeft {
-          float: left;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          span {
-            color: #909090;
-            margin-right: 5px;
-            display: flex;
-            height: 100%;
-            align-items: center;
-            cursor: pointer;
-          }
-          .refresh {
-            cursor: pointer;
-            margin-right: 0;
-          }
-          i {
-            margin-right: 10px;
-          }
-        }
-        .hear-remind-titleRecord {
-          float: right;
-          height: 100%;
-          display: flex;
-          align-items: center;
-
-          span {
-            cursor: pointer;
-          }
-        }
-      }
-      .hear-remind-content {
-        padding: 10px;
-        height: 260px;
-        box-sizing: border-box;
-        width: 100%;
-        position: relative;
-        i {
-          display: inline-block;
-          width: 2px;
-          height: 85%;
-          background-color: #eee;
-          position: absolute;
-          top: 12px;
-          right: 0px;
-        }
-        .tabledata {
-          width: 100%;
-          height: 100%;
-          font-size: 12px;
-          tr {
-            width: 100%;
-            border-bottom: 1px solid #e5e5e5;
-            height: 33px;
-            line-height: 33px;
-            display: flex;
-            td {
-              flex: 1;
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-            }
-          }
-        }
-        // .el-table {
-        //   height: 0;
-        // }
-      }
-    }
+    .await-remind,
+    .hear-remind,
     .happy-remind {
       flex: 1;
       background-color: #fff;
       height: 100%;
-      border-radius: 0 5px 5px 0;
+      border-radius: 5px 0 0 5px;
+      .await-remind-title,
+      .hear-remind-title,
       .happy-remind-title {
         height: 40px;
         border-radius: 5px 5px 0 0;
         font-size: 12px;
         padding: 10px 20px 10px 10px;
         box-sizing: border-box;
+        .await-remind-titleLeft,
+        .hear-remind-titleLeft,
         .happy-remind-titleLeft {
           float: left;
           height: 100%;
@@ -846,17 +655,20 @@ export default {
             margin-right: 10px;
           }
         }
+        .await-remind-titleRecord,
+        .hear-remind-titleRecord,
         .happy-remind-titleRecord {
           float: right;
           height: 100%;
           display: flex;
           align-items: center;
-
           span {
             cursor: pointer;
           }
         }
       }
+      .await-remind-content,
+      .hear-remind-content,
       .happy-remind-content {
         padding: 10px;
         height: 260px;
@@ -892,6 +704,24 @@ export default {
         }
       }
     }
+    .hear-remind {
+      border-radius: 0;
+      .hear-remind-title {
+        .hear-remind-titleLeft {
+          span {
+            color: #909090;
+            margin-right: 5px;
+            display: flex;
+            height: 100%;
+            align-items: center;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+    .happy-remind {
+      border-radius: 0 5px 5px 0;
+    }
   }
   // 学员统计
   .visual {
@@ -900,12 +730,12 @@ export default {
     width: 100%;
     display: flex;
     // 学员统计情况
-    .visual-student {
+    .visual-student,.visual-school {
       flex: 2;
       background-color: #fff;
       margin-right: 10px;
       border-radius: 5px;
-      .visual-student-title {
+      .visual-student-title,.visual-school-title {
         display: flex;
         height: 20px;
         font-size: 12px;
@@ -948,45 +778,21 @@ export default {
           }
         }
       }
-      // .visual-student-content {
-      //   .student-statistics {
-      //   }
-      // }
     }
     // 学员概括情况
     .visual-school {
       flex: 1;
       background-color: #fff;
-      border-radius: 5px;
+      margin-right: 0;
       .visual-school-title {
-        display: flex;
-        height: 20px;
-        font-size: 12px;
-        padding-left: 18px;
-        padding: 10px;
-        justify-content: space-between;
-        .title-left {
-          height: 20px;
-          display: flex;
-          align-items: center;
-          color: #666;
-          span {
-            color: inherit;
-          }
-        }
         .title-right {
-          display: flex;
-          height: 20px;
           .title-condition {
-            flex: 2;
-            height: 100%;
-            display: flex;
             align-items: center;
             span {
               display: flex;
               height: 100%;
               padding: 0 5px;
-              margin-left: 15px;
+              margin-left: 10px;
               align-items: center;
               cursor: pointer;
             }
@@ -1026,7 +832,7 @@ export default {
   .early-warning {
     width: 100%;
     display: block !important;
-    .time-warning {
+    .hour-warning {
       width: 100%;
       margin-bottom: 10px;
     }

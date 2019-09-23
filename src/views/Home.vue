@@ -308,48 +308,7 @@ export default {
     background-color: #7aa9ff;
     color: #fff;
   }
-  // 搜索校区
-  /deep/.el-dialog {
-    float: right;
-    width: 250px;
-    .select-school-content {
-      height: 50px;
-      padding-top: 5px;
-      box-sizing: border-box;
-      a {
-        display: block;
-        width: 100%;
-        height: 20px;
-        line-height: 20px;
-        padding-left: 5px;
-      }
-    }
-    .el-dialog__headerbtn {
-      position: absolute;
-      top: 12px;
-      right: 10px;
-    }
-    .el-input__inner {
-      height: 30px;
-    }
-    .el-dialog__header {
-      padding: 10px 5px;
-      span {
-        font-size: 14px;
-      }
-    }
-    .el-dialog__body {
-      padding: 10px 5px 0 5px;
-    }
-    .el-dialog__footer {
-      padding: 10px 5px;
-      button {
-        width: 46px;
-        height: 28px;
-        padding: 0;
-      }
-    }
-  }
+  
 }
 .searchPanel-enter-active,
 .searchPaneld-leave-active {
