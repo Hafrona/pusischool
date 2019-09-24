@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <router-link to="/" class="logo">
-      <img src="../../public/images/logo.png" alt />
+      <img src="../../public/picture/logo.png" alt />
     </router-link>
     <!-- header左边区域 -->
     <div class="header-left-search">
@@ -31,7 +31,7 @@
                   <span class="label-delete" v-show="panelLabelDelete">x</span>
                 </div>
               </div>
-              <div class="dispose">
+              <div class="dispose" v-show="panelContentNone">
                 <button @click="redact">
                   <span>{{redactValue}}</span>
                 </button>
@@ -39,11 +39,14 @@
                   <span>{{deleteValue}}</span>
                 </button>
               </div>
+              <div class="notLabel" v-show="!panelContentNone">
+                <span>暂无标签~</span>
+              </div>
             </div>
           </div>
         </transition>
         <!-- 搜索功能展开之后的遮罩层 -->
-        <div class="search-mask" v-if="panel" @click="panel = false"></div>
+        <div class="search-mask" v-if="panel" @click="maskClose"></div>
       </div>
       <span class="search-assignment" @click="dialogTableVisible = true"></span>
     </div>
@@ -60,11 +63,11 @@
       <!-- 用户名 -->
       <div class="user-name">
         <i>
-          <img src="../../public/images/touxiang.png" alt />
+          <img src="../../public/picture/touxiang.png" alt />
         </i>
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
-            <span>蒜头王八</span>
+            <span>王明亮</span>
             <i class="user-trilateral"></i>
           </span>
           <!-- 用户状态，个人信息 -->
@@ -162,6 +165,7 @@
   </div>
 </template>
 <script>
+import { log } from "util";
 export default {
   data() {
     return {
@@ -185,15 +189,12 @@ export default {
         []
       ],
       panelIndex: 0,
-      panelLabel: [
-        { name: "萌新班", id: 1, num: 11 },
-        { name: "基础版", id: 2, num: 2 },
-        { name: "提高班", id: 3, num: 10 }
-      ],
+      panelLabel: [],
       panelLabelDelete: false,
       panelLabelRedact: false,
       deleteValue: "删除",
       redactValue: "编辑",
+      panelContentNone: true,
       // 我的任务数据
       dialogTableVisible: false,
       assignmentData: [
@@ -211,6 +212,16 @@ export default {
     };
   },
   methods: {
+    restoreText(){
+      this.deleteValue = "删除";
+      this.redactValue = "编辑";
+      this.panelLabelDelete = false;
+      this.panelLabelRedact = false;
+    },
+    maskClose() {
+      this.panel = false;
+      this.restoreText()
+    },
     // 点击收起左侧导航栏
     packUp() {
       this.$emit("packUp", (this.pack = !this.pack));
@@ -218,10 +229,12 @@ export default {
     // 搜索功能仪表盘左边学员客户班级
     searchPanelTrigger(index) {
       this.panelIndex = index;
-      if (this.panelLabelData[index].length != 0) {
-        this.panelLabel = this.panelLabelData[index];
+      this.panelLabel = this.panelLabelData[index];
+      this.restoreText()
+      if (this.panelLabelData[index].length === 0) {
+        this.panelContentNone = false;
       } else {
-        console.log(123);
+        this.panelContentNone = true;
       }
     },
     // 点击删除标签
@@ -257,6 +270,9 @@ export default {
     // 分页
     handleSizeChange() {},
     handleCurrentChange() {}
+  },
+  mounted() {
+    this.panelLabel = this.panelLabelData[0];
   }
 };
 </script>
@@ -292,7 +308,7 @@ export default {
       display: inline-block;
       width: 24px;
       height: 24px;
-      background-image: url("../../public/images/daohanglan.png");
+      background-image: url("../../public/picture/daohanglan.png");
     }
     .search-input {
       height: 26px;
@@ -312,7 +328,7 @@ export default {
         display: block;
         width: 18px;
         height: 18px;
-        background-image: url("../../public/images/sousuo.png");
+        background-image: url("../../public/picture/sousuo.png");
         background-repeat: no-repeat;
         position: absolute;
         top: 3px;
@@ -429,6 +445,10 @@ export default {
               }
             }
           }
+          .notLabel {
+            color: #39f;
+            font-size: 12px;
+          }
         }
       }
       .search-mask {
@@ -446,7 +466,7 @@ export default {
       display: inline-block;
       width: 24px;
       height: 24px;
-      background-image: url("../../public/images/tongzhi.png");
+      background-image: url("../../public/picture/tongzhi.png");
     }
   }
   // 右边用户部分
@@ -482,7 +502,7 @@ export default {
           display: block;
           width: 18px;
           height: 18px;
-          background-image: url("../../public/images/dingwei.png");
+          background-image: url("../../public/picture/dingwei.png");
           background-repeat: no-repeat;
           position: absolute;
           top: 5px;
@@ -519,7 +539,7 @@ export default {
         display: block;
         width: 24px;
         height: 24px;
-        background-image: url("../../public/images/youce.png");
+        background-image: url("../../public/picture/youce.png");
       }
     }
   }

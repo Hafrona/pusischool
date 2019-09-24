@@ -30,7 +30,7 @@
                 <el-submenu index="1">
                   <template slot="title">
                     <i>
-                      <img src="../../public/images/zhaosheng.png" alt />
+                      <img src="../../public/picture/zhaosheng.png" alt />
                     </i>
                     <span>招生</span>
                   </template>
@@ -45,7 +45,7 @@
                 <el-submenu index="2">
                   <template slot="title">
                     <i>
-                      <img src="../../public/images/jiaoxue.png" alt />
+                      <img src="../../public/picture/jiaoxue.png" alt />
                     </i>
                     <span>教学</span>
                   </template>
@@ -60,7 +60,7 @@
                 <el-submenu index="3">
                   <template slot="title">
                     <i>
-                      <img src="../../public/images/yunying.png" alt />
+                      <img src="../../public/picture/yunying.png" alt />
                     </i>
                     <span>运营</span>
                   </template>
@@ -75,7 +75,7 @@
                 <el-submenu index="4">
                   <template slot="title">
                     <i>
-                      <img src="../../public/images/fuwu.png" alt />
+                      <img src="../../public/picture/fuwu.png" alt />
                     </i>
                     <span>服务</span>
                   </template>
@@ -90,7 +90,7 @@
                 <el-submenu index="5">
                   <template slot="title">
                     <i>
-                      <img src="../../public/images/baobiao.png" alt />
+                      <img src="../../public/picture/baobiao.png" alt />
                     </i>
                     <span>报表</span>
                   </template>
@@ -105,7 +105,7 @@
                 <el-submenu index="6">
                   <template slot="title">
                     <i>
-                      <img src="../../public/images/yingyong.png" alt />
+                      <img src="../../public/picture/yingyong.png" alt />
                     </i>
                     <span>应用</span>
                   </template>
@@ -120,7 +120,7 @@
                 <el-submenu index="7">
                   <template slot="title">
                     <i>
-                      <img src="../../public/images/xitong.png" alt />
+                      <img src="../../public/picture/xitong.png" alt />
                     </i>
                     <span>系统</span>
                   </template>
@@ -142,7 +142,9 @@
           <breadcrumb />
           <router-view></router-view>
         </el-main>
-        <el-aside :width="rightWidth" class="asideRight">右边</el-aside>
+        <el-aside :width="rightWidth" class="asideRight">
+          <rightAside/>
+        </el-aside>
       </el-container>
       <!-- 底部 -->
       <el-footer>Footer</el-footer>
@@ -151,13 +153,18 @@
 </template>
 
 <script>
+//面包屑
 import breadcrumb from "@/components/breadcrumb.vue";
+//头部
 import headModule from "@/views/header.vue";
+// 右侧考勤看板
+import rightAside from "@/components/rightAside.vue"
 export default {
   components: {
     // 面包屑组件
     breadcrumb,
-    headModule
+    headModule,
+    rightAside
   },
   data() {
     return {
@@ -250,6 +257,10 @@ export default {
         }
         span {
           color: #909090;
+        }
+      }
+      ul{
+        li{
         }
       }
       // .el-menu-item.is-active{

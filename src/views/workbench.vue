@@ -37,7 +37,7 @@
               :class="{timeWarningActive:index === timeIndex}"
             >{{item.name}}</span>
             <i>
-              <img src="../../public/images/shuaxin.png" alt />
+              <img src="../../public/picture/shuaxin.png" alt />
             </i>
           </div>
           <div class="hour-warning-titleRecord" @click="hourRecord">
@@ -53,7 +53,7 @@
           <div class="sort-warning-titleLeft">
             <span>排课预警</span>
             <i>
-              <img src="../../public/images/shuaxin.png" alt />
+              <img src="../../public/picture/shuaxin.png" alt />
             </i>
           </div>
           <div class="sort-warning-titleRecord">
@@ -69,7 +69,7 @@
           <div class="lose-warning-titleLeft">
             <span>流失预警</span>
             <i>
-              <img src="../../public/images/shuaxin.png" alt />
+              <img src="../../public/picture/shuaxin.png" alt />
             </i>
           </div>
           <div class="lose-warning-titleRecord">
@@ -79,7 +79,7 @@
         </div>
         <div class="lose-warning-content">暂无预警</div>
       </div>
-      <allRecord :recordVisible='recordVisible' @recordClose='recordClose'/>
+      <allRecord :recordVisible="recordVisible" @recordClose="recordClose" />
     </div>
     <!-- 提醒部分 -->
     <div class="remind">
@@ -88,11 +88,11 @@
         <div class="await-remind-title">
           <div class="await-remind-titleLeft">
             <i>
-              <img src="../../public/images/daiban.png" alt />
+              <img src="../../public/picture/daiban.png" alt />
             </i>
             <span>待办提醒</span>
             <i class="refresh">
-              <img src="../../public/images/shuaxin.png" alt />
+              <img src="../../public/picture/shuaxin.png" alt />
             </i>
           </div>
           <div class="await-remind-titleRecord">
@@ -101,7 +101,7 @@
           </div>
         </div>
         <!-- 内容 -->
-        <div class="await-remind-content clearfix">
+        <div class="await-remind-content">
           <table class="tabledata">
             <tr v-for="(item,index) in tableData" :key="index">
               <td v-for="(content,index) in item" :key="index">{{content}}</td>
@@ -115,7 +115,7 @@
         <div class="hear-remind-title">
           <div class="hear-remind-titleLeft">
             <i>
-              <img src="../../public/images/shiting.png" alt />
+              <img src="../../public/picture/shiting.png" alt />
             </i>
             <span
               v-for="(item,index) in hearRemind"
@@ -124,7 +124,7 @@
               :class="{timeWarningActive:index === remindIndex}"
             >{{item.text}}</span>
             <i class="refresh">
-              <img src="../../public/images/shuaxin.png" alt />
+              <img src="../../public/picture/shuaxin.png" alt />
             </i>
           </div>
           <div class="hear-remind-titleRecord">
@@ -133,13 +133,16 @@
           </div>
         </div>
         <!-- 内容 -->
-        <div class="hear-remind-content clearfix">
-          <table class="tabledata">
-            <tr v-for="(item,index) in tableData" :key="index">
+        <div class="hear-remind-content">
+          <table class="tabledata" v-show="hearNotData">
+            <tr v-for="(item,index) in hearDataIndex" :key="index">
               <td v-for="(content,index) in item" :key="index">{{content}}</td>
             </tr>
           </table>
-          <i></i>
+          <div class="hear-content-notData" v-show="!hearNotData">
+            <span>暂无试听学员</span>
+            <i></i>
+          </div>
         </div>
       </div>
       <!-- 生日 -->
@@ -147,11 +150,11 @@
         <div class="happy-remind-title">
           <div class="happy-remind-titleLeft">
             <i>
-              <img src="../../public/images/shengri.png" alt />
+              <img src="../../public/picture/shengri.png" alt />
             </i>
             <span>生日提醒</span>
             <i class="refresh">
-              <img src="../../public/images/shuaxin.png" alt />
+              <img src="../../public/picture/shuaxin.png" alt />
             </i>
           </div>
           <div class="happy-remind-titleRecord">
@@ -160,7 +163,7 @@
           </div>
         </div>
         <!-- 内容 -->
-        <div class="happy-remind-content clearfix">
+        <div class="happy-remind-content">
           <table class="tabledata">
             <tr v-for="(item,index) in tableData" :key="index">
               <td v-for="(content,index) in item" :key="index">{{content}}</td>
@@ -219,14 +222,13 @@
         <div class="visual-school-content"></div>
       </div>
     </div>
-    <!-- 点击常用导航弹出功能 -->
     <!-- 点击常用导航栏，然后判断当前点击，拿到索引，根据索引的不同加载不同的内容 -->
     <!-- <workbenchNav :navindex="navIndex" v-show="navState" @concel='navClose'/> -->
   </div>
 </template>
 <script>
 // import workbenchNav from "@/views/workbench/workbenchNav.vue";
-import allRecord from "@/views/workbench/allRecord.vue"
+import allRecord from "@/views/workbench/allRecord.vue";
 export default {
   components: {
     // workbenchNav,
@@ -245,7 +247,7 @@ export default {
       ],
       timeIndex: 0,
       // 查看全部记录
-      recordVisible:false,
+      recordVisible: false,
       // 常用导航栏数据
       navIndex: 1,
       nav: [
@@ -369,7 +371,35 @@ export default {
           name: "王小虎",
           address: "上海市普陀区金沙江路 1517 弄"
         }
-      ]
+      ],
+      hearData: [
+        [
+          {
+            date: "2016-05-02",
+            name: "王小虎",
+            address: "上海市普陀区金沙江路 1518 弄"
+          },
+          {
+            date: "2016-05-02",
+            name: "王小虎",
+            address: "上海市普陀区金沙江路 1518 弄"
+          },
+          {
+            date: "2016-05-02",
+            name: "王小虎",
+            address: "上海市普陀区金沙江路 1518 弄"
+          }
+        ],
+        [
+          {
+            date: "2016-05-02",
+            name: "王小虎",
+            address: "上海市普陀区金沙江路 1518 弄"
+          }
+        ]
+      ],
+      hearDataIndex:[],
+      hearNotData:true
     };
   },
   methods: {
@@ -424,11 +454,11 @@ export default {
       this.timeIndex = index;
     },
     //课时预警查看全部记录
-    hourRecord(){
+    hourRecord() {
       this.recordVisible = true;
     },
-    recordClose(data){
-      this.recordVisible = data
+    recordClose(data) {
+      this.recordVisible = data;
     },
     //学员统计情况
     studenStatistics(index) {
@@ -441,6 +471,7 @@ export default {
     //试听提醒
     remindClick(index) {
       this.remindIndex = index;
+      this.hearDataIndex = this.hearData[index];
     }
     //关闭常用导航栏弹窗
     // navClose(data){
@@ -449,6 +480,8 @@ export default {
   },
   mounted() {
     this.drawLine();
+    this.remindIndex = 0,
+    this.hearDataIndex = this.hearData[0]
   }
 };
 </script>
@@ -504,7 +537,7 @@ export default {
       align-items: center;
       // padding-left: 20px;
       // margin-right: 15px;
-      background: url("../../public/images/gonggao.png") no-repeat center;
+      background: url("../../public/picture/gonggao.png") no-repeat center;
     }
     > span {
       position: absolute;
@@ -513,7 +546,7 @@ export default {
       display: block;
       width: 20px;
       height: 20px;
-      background: url("../../public/images/bigup.png") no-repeat;
+      background: url("../../public/picture/bigup.png") no-repeat;
       cursor: pointer;
     }
     .noticetext {
@@ -718,6 +751,14 @@ export default {
           }
         }
       }
+      .hear-remind-content{
+        .hear-content-notData{
+          height:100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
     }
     .happy-remind {
       border-radius: 0 5px 5px 0;
@@ -730,12 +771,14 @@ export default {
     width: 100%;
     display: flex;
     // 学员统计情况
-    .visual-student,.visual-school {
+    .visual-student,
+    .visual-school {
       flex: 2;
       background-color: #fff;
       margin-right: 10px;
       border-radius: 5px;
-      .visual-student-title,.visual-school-title {
+      .visual-student-title,
+      .visual-school-title {
         display: flex;
         height: 20px;
         font-size: 12px;
@@ -779,7 +822,7 @@ export default {
         }
       }
     }
-    // 学员概括情况
+    // 学校统计情况
     .visual-school {
       flex: 1;
       background-color: #fff;
